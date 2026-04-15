@@ -14,18 +14,39 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/announcements")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class AnnouncementController {
 
-    private final AnnouncementService service;
+    private final AnnouncementService announcementService;
 
-    @GetMapping("/flight/{number}")
-    public ResponseEntity<List<AnnouncementDTO>> getByFlight(@PathVariable String number) {
-        return ResponseEntity.ok(service.getAnnouncementsByFlight(number));
+    @GetMapping("/flight/{flightCode}")
+    public ResponseEntity<List<AnnouncementDTO>> getByFlight(
+            @PathVariable String flightCode,
+            @RequestParam Long userId) { // Pedimos el ID del usuario que consulta
+
+        List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByFlight(flightCode, userId);
+        return ResponseEntity.ok(announcements);
     }
 
     @PostMapping
-    public ResponseEntity<AnnouncementDTO> create(@RequestBody AnnouncementDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.createAnnouncement(dto));
+    public ResponseEntity<AnnouncementDTO> createAnnouncement(
+            @RequestBody AnnouncementDTO dto,
+            @RequestParam Long userId) {
+        return ResponseEntity.ok(announcementService.createAnnouncement(dto, userId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id, @RequestParam Long userId) {
+        announcementService.delete(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(
+            @PathVariable Long id,
+            @RequestBody AnnouncementDTO dto,
+            @RequestParam Long userId) {
+        return ResponseEntity.ok(announcementService.updateAnnouncement(id, dto, userId));
     }
 }

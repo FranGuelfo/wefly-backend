@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
-
-    // Spring entiende esto mágicamente y crea la consulta
-    List<Announcement> findByFlightNumberIgnoreCase(String flightNumber);
+    // Esto busca el código dentro del objeto Flight que está dentro de Announcement
+    List<Announcement> findByFlight_FlightNumberIgnoreCase(String flightNumber);
 }

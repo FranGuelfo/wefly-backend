@@ -1,27 +1,23 @@
-package com.wefly.wefly.model;
+package com.wefly.wefly.model.dto;
 
-import jakarta.persistence.*;
+import com.wefly.wefly.model.Announcement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Builder
+public class UserDTO {
 
+    private Long id;
     private String name;
     private String email;
     private String bio;
     private String profilePictureUrl;
-
-    @OneToMany(mappedBy = "author")
     private List<Announcement> announcements;
 }

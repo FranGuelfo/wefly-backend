@@ -6,7 +6,11 @@ import java.util.List;
 
 public interface AnnouncementService {
 
-    List<AnnouncementDTO> getAnnouncementsByFlight(String flightNumber);
+    List<AnnouncementDTO> getAnnouncementsByFlight(String flightNumber, Long userId);
 
-    AnnouncementDTO createAnnouncement(AnnouncementDTO dto);
+    AnnouncementDTO createAnnouncement(AnnouncementDTO dto, Long userId);
+
+    void delete(Long id, Long userId);
+
+    AnnouncementDTO updateAnnouncement(Long id, AnnouncementDTO dto, Long userId);
 }
