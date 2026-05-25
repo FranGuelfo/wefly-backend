@@ -1,5 +1,6 @@
 package com.wefly.wefly.controller;
 
+import com.wefly.wefly.model.Flight;
 import com.wefly.wefly.repository.BookingRepository;
 import com.wefly.wefly.service.FlightService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,12 @@ public class FlightController {
 
     private final FlightService flightService;
     private final BookingRepository bookingRepository;
+
+    @GetMapping
+    public ResponseEntity<java.util.List<Flight>> getAllFlights() {
+        // Retornamos todos los vuelos que se hayan creado en la base de datos
+        return ResponseEntity.ok(flightService.findAllFlights());
+    }
 
     // POST /api/v1/flights/join?userId=2&flightNumber=IB3110&reservationCode=XY1234
     @PostMapping("/join")
@@ -30,7 +37,7 @@ public class FlightController {
     public ResponseEntity<String> verifyBooking(@PathVariable Long bookingId) {
         return bookingRepository.findById(bookingId)
                 .map(booking -> {
-                    booking.setConfirmed(true);
+                    booking.setIsConfirmed(true);
                     bookingRepository.save(booking);
                     return ResponseEntity.ok("Reserva confirmada");
                 })

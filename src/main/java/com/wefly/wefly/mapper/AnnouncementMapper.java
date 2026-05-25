@@ -3,8 +3,6 @@ package com.wefly.wefly.mapper;
 import com.wefly.wefly.model.Announcement;
 import com.wefly.wefly.model.AnnouncementType;
 import com.wefly.wefly.model.dto.AnnouncementDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
 @Component

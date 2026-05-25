@@ -19,5 +19,5 @@ public class Booking {
 
     private String reservationCode; // El código de 6 dígitos de la aerolínea
 
-    private boolean isConfirmed = false; // Esto se pondrá a true tras validar el PDF/OCR
+    private Boolean isConfirmed = false; // Esto se pondrá a true tras validar el PDF/OCR
 }

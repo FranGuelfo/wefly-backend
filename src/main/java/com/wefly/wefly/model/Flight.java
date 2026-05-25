@@ -1,5 +1,6 @@
 package com.wefly.wefly.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,5 +25,6 @@ public class Flight {
     private LocalDateTime arrivalTime;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Announcement> announcements;
 }

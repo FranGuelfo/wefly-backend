@@ -10,6 +10,8 @@ import com.wefly.wefly.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
@@ -17,6 +19,11 @@ public class FlightServiceImpl implements FlightService {
     private final FlightRepository flightRepository;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public java.util.List<Flight> findAllFlights() {
+        return flightRepository.findAll();
+    }
 
     @Override
     public Booking joinFlight(Long userId, String flightNumber, String reservationCode) {
@@ -39,7 +46,7 @@ public class FlightServiceImpl implements FlightService {
             booking.setUser(user);
             booking.setFlight(flight);
             booking.setReservationCode(reservationCode);
-            booking.setConfirmed(false); // Esperando validación de ticket/OCR
+            booking.setIsConfirmed(false); // Esperando validación de ticket/OCR
 
             return bookingRepository.save(booking);
         }

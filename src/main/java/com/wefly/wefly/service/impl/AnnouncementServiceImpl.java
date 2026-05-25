@@ -33,7 +33,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public List<AnnouncementDTO> getAnnouncementsByFlight(String flightNumber, Long userId) {
         // 1. Verificación de seguridad: ¿Tiene el usuario una reserva confirmada?
         bookingRepository.findByUserId(userId).stream()
-                .filter(b -> b.getFlight().getFlightNumber().equalsIgnoreCase(flightNumber) && b.isConfirmed())
+                .filter(b -> b.getFlight().getFlightNumber().equalsIgnoreCase(flightNumber) && b.getIsConfirmed())
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Verifica tu vuelo primero"));
 
@@ -49,7 +49,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public AnnouncementDTO createAnnouncement(AnnouncementDTO dto, Long userId) {
         // 1. Verificación de seguridad: ¿Está el usuario confirmado en ESTE vuelo para poder publicar?
         bookingRepository.findByUserId(userId).stream()
-                .filter(b -> b.getFlight().getFlightNumber().equalsIgnoreCase(dto.getFlightNumber()) && b.isConfirmed())
+                .filter(b -> b.getFlight().getFlightNumber().equalsIgnoreCase(dto.getFlightNumber()) && b.getIsConfirmed())
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes publicar si no estás verificado en este vuelo"));
 

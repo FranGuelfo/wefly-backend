@@ -1,12 +1,9 @@
 package com.wefly.wefly.model.dto;
 
-import com.wefly.wefly.model.Announcement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +16,5 @@ public class UserDTO {
     private String email;
     private String bio;
     private String profilePictureUrl;
-    private List<Announcement> announcements;
+    private Boolean isVerified;
 }

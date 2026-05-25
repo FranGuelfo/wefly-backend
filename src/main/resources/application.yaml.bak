@@ -5,7 +5,7 @@ spring:
   application:
     name: wefly
   datasource:
-    url: jdbc:h2:mem:weflydb
+    url: jdbc:h2:mem:weflydb;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password: ""
@@ -20,7 +20,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
 
-  security:
-    headers:
-      frame-options: disable
+  main:
+    allow-circular-references: true

@@ -1,12 +1,8 @@
 package com.wefly.wefly.controller;
 
-import com.wefly.wefly.model.Announcement;
 import com.wefly.wefly.model.dto.AnnouncementDTO;
-import com.wefly.wefly.repository.AnnouncementRepository;
 import com.wefly.wefly.service.AnnouncementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +19,7 @@ public class AnnouncementController {
     @GetMapping("/flight/{flightCode}")
     public ResponseEntity<List<AnnouncementDTO>> getByFlight(
             @PathVariable String flightCode,
-            @RequestParam Long userId) { // Pedimos el ID del usuario que consulta
+            @RequestParam Long userId) {
 
         List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByFlight(flightCode, userId);
         return ResponseEntity.ok(announcements);
