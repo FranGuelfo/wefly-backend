@@ -1,5 +1,6 @@
 package com.wefly.wefly.config;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,11 +13,12 @@ public class CorsConfig {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Aplica a todos los endpoints de la app
-                        .allowedOrigins("*") // Permite cualquier servidor de Flutter (localhost:XXXXX)
-                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+            public void addCorsMappings(@NonNull CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*") // En producción aquí pondrás el dominio real
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .exposedHeaders("Authorization");
             }
         };
     }
