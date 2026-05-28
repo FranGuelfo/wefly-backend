@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name = "users")
 @Data
@@ -27,7 +25,4 @@ public class User {
 
     @Column(length = 500)
     private String bio;
-
-    @OneToMany(mappedBy = "author")
-    private List<Announcement> announcements;
 }

@@ -1,8 +1,8 @@
 package com.wefly.wefly.service.impl;
 
-import com.wefly.wefly.model.dto.UserDTO;
 import com.wefly.wefly.mapper.UserMapper;
 import com.wefly.wefly.model.User;
+import com.wefly.wefly.model.dto.UserDTO;
 import com.wefly.wefly.repository.UserRepository;
 import com.wefly.wefly.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +54,6 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

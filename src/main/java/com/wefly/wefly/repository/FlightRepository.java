@@ -9,9 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
 
-    // Este es el método que le falta a tu Service
     Optional<Flight> findByFlightNumber(String flightNumber);
-
-    // También es útil tener este para las búsquedas ignorando mayúsculas/minúsculas
-    Optional<Flight> findByFlightNumberIgnoreCase(String flightNumber);
 }

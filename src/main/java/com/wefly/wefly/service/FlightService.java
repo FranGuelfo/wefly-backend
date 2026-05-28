@@ -1,13 +1,10 @@
 package com.wefly.wefly.service;
 
-import com.wefly.wefly.model.Booking;
 import com.wefly.wefly.model.Flight;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface FlightService {
 
-    List<Flight> findAllFlights();
-
-    Booking joinFlight(Long userId, String flightNumber, String reservationCode);
+    Optional<Flight> getOrFetchFlight(String flightNumber);
 }

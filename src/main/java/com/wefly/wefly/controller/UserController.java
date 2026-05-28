@@ -1,25 +1,25 @@
 package com.wefly.wefly.controller;
 
-import com.wefly.wefly.model.dto.UserDTO;
-import com.wefly.wefly.service.UserService;
+import com.wefly.wefly.model.User;
+import com.wefly.wefly.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE}, allowedHeaders = "*")
 public class UserController {
-    private final UserService userService;
+
+    private final UserRepository userRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserPartial(@PathVariable Long id, @RequestBody UserDTO dto) {
-        return ResponseEntity.ok(userService.update(id, dto));
+    public ResponseEntity<User> getUserProfile(@PathVariable Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasajero no encontrado"));
+        return ResponseEntity.ok(user);
     }
 }

@@ -5,21 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AnnouncementDTO {
     private Long id;
-    private String flightNumber; // Lo mantenemos como Number
     private String title;
     private String description;
-    private String contactInfo;
-    private String category;     // TO_AIRPORT, etc.
-    private String type;         // TRANSPORT, etc.
-    private Integer seatsAvailable;
-
-    // Datos del autor para el Frontend
+    private int seatsAvailable;
+    private String category;
+    private String origin;
+    private String destination;
+    private String dateStr;
+    private String flightNumber;
     private Long authorId;
     private String authorName;
+    private String authorPhone;
+    private LocalDateTime createdAt;
 }

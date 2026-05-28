@@ -1,43 +1,67 @@
 package com.wefly.wefly.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "announcements")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "anuncios")
 public class Announcement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Cambios para coincidir con Flutter
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false, length = 1000)
     private String description;
-    private String contactInfo;
 
-    @Enumerated(EnumType.STRING)
-    private Category category; // LEISURE, TO_AIRPORT, FROM_AIRPORT
+    @Column(nullable = false)
+    private int seatsAvailable;
 
-    @Enumerated(EnumType.STRING)
-    private AnnouncementType type; // TRANSPORT, LEISURE
+    @Column(nullable = false)
+    private String category;
 
-    private Integer seatsAvailable;
+    @Column(nullable = false)
+    private String origin;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flight_id")
-    private Flight flight; // Relación con el vuelo
+    @Column(nullable = false)
+    private String destination;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User author; // Quién lo publica
+    @Column(nullable = false)
+    private String dateStr;
+
+    @Column(nullable = false)
+    private String flightNumber;
+
+    @Column(nullable = false)
+    private Long authorId;
+
+    private String authorName;
+
+    private String authorPhone;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public enum Category { TO_AIRPORT, FROM_AIRPORT, LEISURE }
+    public Announcement(String title, String description, int seatsAvailable, String category,
+                        String origin, String destination, String dateStr, String flightNumber,
+                        Long authorId, String authorName, String authorPhone) {
+        this.title = title;
+        this.description = description;
+        this.seatsAvailable = seatsAvailable;
+        this.category = category;
+        this.origin = origin;
+        this.destination = destination;
+        this.dateStr = dateStr;
+        this.flightNumber = flightNumber;
+        this.authorId = authorId;
+        this.authorName = authorName;
+        this.authorPhone = authorPhone;
+    }
 }
