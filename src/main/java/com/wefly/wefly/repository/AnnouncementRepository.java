@@ -10,4 +10,6 @@ import java.util.List;
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
 
     List<Announcement> findByFlightNumberOrderByCreatedAtDesc(String flightNumber);
+
+    Announcement findByFlightNumber(String flightNumber);
 }

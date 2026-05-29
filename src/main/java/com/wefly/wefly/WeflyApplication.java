@@ -37,7 +37,7 @@ public class WeflyApplication {
             PasswordEncoder passwordEncoder) {
 
         return args -> {
-            // 1. Usuarios (Mantenemos igual)
+            // 1. Usuarios
             User fran = User.builder()
                     .name("Fran")
                     .email("fran@wefly.com")
@@ -48,7 +48,7 @@ public class WeflyApplication {
             User mila = User.builder().name("Mila").email("mila@wefly.com").isVerified(false).build();
             userRepo.save(mila);
 
-            // 2. Vuelo (Mantenemos igual)
+            // 2. Vuelo
             Flight flight = new Flight();
             flight.setFlightNumber("IB3240");
             flight.setOrigin("MAD");
@@ -56,7 +56,7 @@ public class WeflyApplication {
             flight.setPlazas(3);
             flightRepo.save(flight);
 
-            // 3. Reservas (Mantenemos igual)
+            // 3. Reservas
             Booking bookingFran = new Booking();
             bookingFran.setUser(fran);
             bookingFran.setFlight(flight);
@@ -64,7 +64,7 @@ public class WeflyApplication {
             bookingFran.setIsConfirmed(true);
             bookingRepo.save(bookingFran);
 
-            // 4. Anuncio inicial REFACTORIZADO
+            // 4. Anuncio inicial
             Announcement annInicial = getAnnouncement(fran);
 
             annRepo.save(annInicial);
@@ -75,8 +75,8 @@ public class WeflyApplication {
 
     private static @NonNull Announcement getAnnouncement(User fran) {
         Announcement annInicial = new Announcement();
-        annInicial.setTitle("Taxi compartido al centro"); // Nuevo campo
-        annInicial.setDescription("Voy directo a la Torre Eiffel, si alguien se apunta para dividir gastos, bienvenido."); // Nuevo campo
+        annInicial.setTitle("Taxi compartido al centro");
+        annInicial.setDescription("Voy directo a la Torre Eiffel, si alguien se apunta para dividir gastos, bienvenido.");
         annInicial.setSeatsAvailable(3);
         annInicial.setCategory("TO_AIRPORT");
         annInicial.setOrigin("Aeropuerto París (CDG)");
@@ -84,7 +84,6 @@ public class WeflyApplication {
         annInicial.setDateStr("28 Mayo, 2026");
         annInicial.setFlightNumber("IB3240");
 
-        // Mapeo a los nuevos campos de autor
         annInicial.setAuthorId(fran.getId());
         annInicial.setAuthorName(fran.getName());
         annInicial.setAuthorPhone("+34600000000"); // Valor de prueba

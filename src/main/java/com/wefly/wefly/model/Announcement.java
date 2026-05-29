@@ -15,7 +15,6 @@ public class Announcement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Cambios para coincidir con Flutter
     @Column(nullable = false)
     private String title;
 
