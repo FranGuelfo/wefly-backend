@@ -88,7 +88,7 @@ public class FlightServiceImpl implements FlightService {
         return Optional.of(savedFlight);
     }
 
-    // Método auxiliar para simular datos realistas según las iniciales del vuelo
+    // Metodo auxiliar para simular datos realistas según las iniciales del vuelo
     private Flight generateSimulatedFlight(String flightNumber) {
         String origin = "MAD";      // Madrid por defecto
         String destination = "BCN"; // Barcelona por defecto

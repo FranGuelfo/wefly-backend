@@ -1,5 +1,7 @@
 package com.wefly.wefly.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class Message {
     private Long id;
 
     // Relacionamos el mensaje con el anuncio (el grupo de viaje)
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
@@ -35,6 +38,11 @@ public class Message {
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
+
+    @JsonProperty("announcementId")
+    public Long getAnnouncementId() {
+        return this.announcement != null ? this.announcement.getId() : null;
+    }
 
     // Constructor útil
     public Message(Announcement announcement, Long senderId, String senderName, String content) {

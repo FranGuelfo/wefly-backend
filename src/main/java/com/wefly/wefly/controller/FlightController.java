@@ -83,6 +83,11 @@ public class FlightController {
     @PostMapping("/join")
     public ResponseEntity<?> joinFlight(@RequestBody Map<String, Object> payload) {
         try {
+
+            if (!payload.containsKey("flightId") || !payload.containsKey("userId")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("error", "Faltan parámetros obligatorios (flightId o userId)"));
+            }
             Long flightId = Long.parseLong(payload.get("flightId").toString());
             Long userId = Long.parseLong(payload.get("userId").toString());
             String reservationCode = (String) payload.get("reservationCode");
