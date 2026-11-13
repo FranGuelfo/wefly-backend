@@ -1,25 +1,27 @@
 package com.wefly.wefly.controller;
 
-import com.wefly.wefly.model.User;
-import com.wefly.wefly.repository.UserRepository;
+import com.wefly.wefly.model.dto.UserDTO;
+import com.wefly.wefly.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
+@Tag(name = "5. Usuarios", description = "Gestión de perfiles de usuario")
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
+    @Operation(summary = "Obtener perfil de usuario por ID")
+    @ApiResponse(responseCode = "200", description = "Perfil de usuario recuperado con éxito")
+    @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserProfile(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pasajero no encontrado"));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDTO> getUserProfile(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 }

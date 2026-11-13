@@ -1,12 +1,12 @@
 package com.wefly.wefly.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wefly.wefly.model.Flight;
 import com.wefly.wefly.repository.FlightRepository;
 import com.wefly.wefly.service.FlightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -60,8 +60,8 @@ public class FlightServiceImpl implements FlightService {
                 // Si OpenSky nos devuelve información estructurada de la ruta
                 if (root.has("route")) {
                     JsonNode route = root.get("route");
-                    String origin = route.get(0).asString(); // Aeropuerto origen (ICAO de 4 letras, ej: LEMD)
-                    String destination = route.get(1).asString(); // Aeropuerto destino (ej: LEAL)
+                    String origin = route.get(0).asText(); // Aeropuerto origen (ICAO de 4 letras, ej: LEMD)
+                    String destination = route.get(1).asText(); // Aeropuerto destino (ej: LEAL)
 
                     // Convertir códigos de 4 letras a 3 letras típicos (ej: LEMD -> MAD, LEAL -> ALC) de forma simplificada
                     origin = formatAirportCode(origin);

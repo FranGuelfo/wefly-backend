@@ -6,7 +6,7 @@ import com.wefly.wefly.model.Announcement;
 import com.wefly.wefly.repository.MessageRepository;
 import com.wefly.wefly.repository.AnnouncementRepository;
 import jakarta.transaction.Transactional;
-import org.jspecify.annotations.NonNull;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -104,7 +104,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    // Método auxiliar blindado contra NullPointerException
+    // Metodo auxiliar blindado contra NullPointerException
     private Long getAnnouncementId(WebSocketSession session) {
         URI uri = session.getUri();
         if (uri == null) {
