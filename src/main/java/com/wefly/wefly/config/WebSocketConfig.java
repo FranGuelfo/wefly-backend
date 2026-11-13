@@ -17,7 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        // Definimos el endpoint dinámico. Flutter se conectará a: ws://tu-ip:8080/chat/{idAnuncio}
         registry.addHandler(chatWebSocketHandler, "/chat/{announcementId}")
                 .setAllowedOrigins("*"); // Permite conexiones desde el emulador o móviles físicos
     }

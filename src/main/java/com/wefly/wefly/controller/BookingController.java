@@ -1,97 +1,68 @@
 package com.wefly.wefly.controller;
 
-import com.wefly.wefly.model.Announcement;
-import com.wefly.wefly.model.Booking;
-import com.wefly.wefly.model.Flight;
-import com.wefly.wefly.repository.AnnouncementRepository;
-import com.wefly.wefly.repository.BookingRepository;
-import com.wefly.wefly.repository.FlightRepository;
+import com.wefly.wefly.model.dto.BookingResponseDTO;
+import com.wefly.wefly.model.dto.MessageResponseDTO;
+import com.wefly.wefly.service.BookingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@Tag(name = "3. Reservas", description = "Gestión de solicitudes de plaza, aprobaciones y rechazos")
 @RestController
 @RequestMapping("/api/v1/bookings")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class BookingController {
 
-    private final BookingRepository bookingRepository;
-    private final FlightRepository flightRepository;
-    private final AnnouncementRepository announcementRepository;
+    private final BookingService bookingService;
 
+    @Operation(summary = "Consultar solicitudes pendientes")
+    @ApiResponse(responseCode = "200", description = "Lista recuperada con éxito")
+    @ApiResponse(responseCode = "404", description = "Vuelo no encontrado", content = @Content)
     @GetMapping("/pending/{flightId}")
-    public ResponseEntity<?> getPendingBookings(@PathVariable Long flightId) {
-        List<Booking> pendingBookings = bookingRepository.findByFlightIdAndIsConfirmedFalse(flightId);
-
-        List<Map<String, Object>> response = pendingBookings.stream().map(b -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", b.getId());
-            map.put("userId", b.getUser().getId());
-            map.put("userName", b.getUser().getName());
-            map.put("userEmail", b.getUser().getEmail());
-            map.put("reservationCode", b.getReservationCode());
-            map.put("isVerified", b.getUser().getIsVerified());
-            return map;
-        }).toList();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<BookingResponseDTO>> getPendingBookings(
+            @Parameter(description = "ID del vuelo a consultar", example = "1")
+            @PathVariable Long flightId) {
+        return ResponseEntity.ok(bookingService.getPendingBookings(flightId));
     }
 
-    @PutMapping("/approve/{bookingId}")
-    public ResponseEntity<?> approveBooking(@PathVariable Long bookingId) {
-        return bookingRepository.findById(bookingId).map(booking -> {
-            booking.setIsConfirmed(true);
-            bookingRepository.save(booking);
-
-            Flight flight = booking.getFlight();
-            int plazasActuales = (flight.getPlazas() != null) ? flight.getPlazas() : 0;
-
-            if (plazasActuales > 0) {
-                flight.setPlazas(plazasActuales - 1);
-                flightRepository.save(flight);
-
-
-                Announcement announcement = announcementRepository.findByFlightNumber(flight.getFlightNumber());
-                announcement.setSeatsAvailable(announcement.getSeatsAvailable() - 1);
-                announcementRepository.save(announcement);
-
-            } else {
-                return ResponseEntity.badRequest().body("No quedan plazas disponibles");
-            }
-
-            return ResponseEntity.ok("Reserva aprobada");
-        }).orElse(ResponseEntity.notFound().build());
-    }
-
+    @Operation(summary = "Consultar solicitudes confirmadas")
+    @ApiResponse(responseCode = "200", description = "Lista recuperada con éxito")
+    @ApiResponse(responseCode = "404", description = "Vuelo no encontrado", content = @Content)
     @GetMapping("/confirmed/{flightId}")
-    public ResponseEntity<?> getConfirmedBookings(@PathVariable Long flightId) {
-        List<Booking> confirmedBookings = bookingRepository.findByFlightIdAndIsConfirmedTrue(flightId);
-
-        List<Map<String, Object>> response = confirmedBookings.stream().map(b -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", b.getId());
-            map.put("userId", b.getUser().getId());
-            map.put("userName", b.getUser().getName());
-            map.put("userEmail", b.getUser().getEmail());
-            map.put("reservationCode", b.getReservationCode());
-            map.put("isVerified", b.getUser().getIsVerified());
-            return map;
-        }).toList();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<BookingResponseDTO>> getConfirmedBookings(@PathVariable Long flightId) {
+        return ResponseEntity.ok(bookingService.getConfirmedBookings(flightId));
     }
 
+    @Operation(summary = "Aprobar una solicitud de plaza")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reserva aprobada con éxito"),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada", content = @Content),
+            @ApiResponse(responseCode = "400", description = "No hay plazas disponibles", content = @Content)
+    })
+    @PostMapping("/approve/{bookingId}")
+    public ResponseEntity<MessageResponseDTO> approveBooking(
+            @Parameter(description = "ID de la reserva a aprobar", example = "1")
+            @PathVariable Long bookingId) {
+        bookingService.approveBooking(bookingId);
+        return ResponseEntity.ok(new MessageResponseDTO(true, "Reserva aprobada y plaza restada"));
+    }
+
+    @Operation(summary = "Rechazar una solicitud de plaza")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reserva rechazada con éxito"),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada", content = @Content)
+    })
     @DeleteMapping("/reject/{bookingId}")
-    public ResponseEntity<?> rejectBooking(@PathVariable Long bookingId) {
-        if (bookingRepository.existsById(bookingId)) {
-            bookingRepository.deleteById(bookingId);
-            return ResponseEntity.ok("Reserva rechazada y eliminada");
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<MessageResponseDTO> rejectBooking(@PathVariable Long bookingId) {
+        bookingService.rejectBooking(bookingId);
+        return ResponseEntity.ok(new MessageResponseDTO(true, "Reserva rechazada"));
     }
 }

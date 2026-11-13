@@ -8,7 +8,8 @@ import com.wefly.wefly.repository.AnnouncementRepository;
 import com.wefly.wefly.repository.BookingRepository;
 import com.wefly.wefly.repository.FlightRepository;
 import com.wefly.wefly.repository.UserRepository;
-import org.jspecify.annotations.NonNull;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
+@Slf4j
 public class WeflyApplication {
 
     @Bean
@@ -42,7 +44,7 @@ public class WeflyApplication {
                     .name("Fran")
                     .email("fran@wefly.com")
                     .isVerified(true)
-                    .password(passwordEncoder.encode("123456"))
+                    .password(passwordEncoder.encode("password123"))
                     .build();
             userRepo.save(fran);
             User mila = User.builder().name("Mila").email("mila@wefly.com").isVerified(false).build();
@@ -69,7 +71,7 @@ public class WeflyApplication {
 
             annRepo.save(annInicial);
 
-            System.out.println("✅ Entorno de prueba listo (v2) con modelo actualizado");
+            log.info("✅ Entorno de prueba listo (v2) con modelo actualizado");
         };
     }
 

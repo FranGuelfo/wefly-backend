@@ -15,8 +15,8 @@ import java.util.Map;
 public class JwtUtil {
 
     // Clave secreta de prueba (Debe tener al menos 256 bits). En producción se lee de application.properties
-    private final String SECRET_KEY = "TuClaveSecretaSuperSeguraParaWeFlyApp2026!#";
-    private final long EXPIRATION_TIME = 86400000; // 24 horas en milisegundos
+    private static final String SECRET_KEY = "TuClaveSecretaSuperSeguraParaWeFlyApp2026!#";
+    private static final long EXPIRATION_TIME = 86400000; // 24 horas en milisegundos
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
